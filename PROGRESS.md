@@ -163,7 +163,8 @@ messages. After step 3, look at the output and compare with `03_workflow_3hourly
 
 22. Glassdoor: the shortened link (`/job-listing/?jl=<n>`) opened Glassdoor's security
     block page on the phone, so items now keep the exact link from the mail. Items scored
-    before 00:10 on 10 Oct still carry the short link.
+    before 00:10 on 10 Oct still carry the short link. Confirmed on the phone with a
+    test mail: the mail's own links open the job page.
 
 ## Technical notes for whoever edits this next
 
