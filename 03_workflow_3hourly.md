@@ -38,8 +38,9 @@ Catch-up: if the previous timed run was longer ago than that, because the laptop
 or asleep, the run looks back to 5 minutes before that previous run, at most 24 hours.
 Without this, anything arriving while the laptop is off would never be seen. For a
 strict 3 h 5 min window every time, set `CATCH_UP = false` in `tools/fetch_window.js`.
-A run started by hand with **Execute workflow** does not move the "previous run" marker;
-a catch-up run does.
+Only timed runs move the "previous run" marker. A run started by hand or by the catch-up
+watchdog does not, so the next timed run looks back a little further than needed; the
+repeat check drops what was already handled.
 
 ## Split job mails into single jobs
 
