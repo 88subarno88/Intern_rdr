@@ -1,0 +1,169 @@
+{
+ "id": "radarFailAlert001",
+ "name": "Radar - failure alert",
+ "nodes": [
+  {
+   "parameters": {},
+   "name": "On failure",
+   "type": "n8n-nodes-base.errorTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    0
+   ],
+   "id": "on-failure"
+  },
+  {
+   "parameters": {},
+   "name": "Test alert",
+   "type": "n8n-nodes-base.manualTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    200
+   ],
+   "id": "test-alert"
+  },
+  {
+   "parameters": {
+    "mode": "manual",
+    "assignments": {
+     "assignments": [
+      {
+       "id": "m1",
+       "name": "subject",
+       "type": "string",
+       "value": "=[Radar] Run failed: {{ $json.workflow?.name || 'test alert' }}"
+      },
+      {
+       "id": "m2",
+       "name": "html",
+       "type": "string",
+       "value": "={{ (() => { const e = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); const x = $json.execution || 0; const err = x.error || 0; const w = $json.workflow || 0; return '<div style=\"font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:21px;color:#111827;\">' + '<p><b>' + e(w.name || 'Test alert') + '</b> did not finish.</p>' + '<p>Step that failed: ' + e(x.lastNodeExecuted || 'none, this is a test') + '<br>Error: ' + e(err.message || 'none, this is a test') + '</p>' + '<p>Items waiting to be scored stay in the buffer and are retried on the next run, so nothing is lost. If the same alert keeps coming, open the run and look at the red step.</p>' + (x.url ? '<p><a href=\"' + e(x.url) + '\">Open the failed run in n8n</a></p>' : '') + '</div>'; })() }}"
+      }
+     ]
+    },
+    "includeOtherFields": false,
+    "options": {}
+   },
+   "name": "Build alert",
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    220,
+    100
+   ],
+   "id": "build-alert"
+  },
+  {
+   "parameters": {
+    "operation": "toJson",
+    "mode": "once",
+    "binaryPropertyName": "data",
+    "options": {}
+   },
+   "name": "Alert to JSON",
+   "type": "n8n-nodes-base.convertToFile",
+   "typeVersion": 1.1,
+   "position": [
+    440,
+    100
+   ],
+   "id": "alert-to-json"
+  },
+  {
+   "parameters": {
+    "operation": "write",
+    "fileName": "=/home/vzux/.n8n-files/radar/outbox/{{ $now.toFormat('yyyyLLdd-HHmmss') }}-alert.json",
+    "dataPropertyName": "data",
+    "options": {}
+   },
+   "name": "Save to outbox",
+   "type": "n8n-nodes-base.readWriteFile",
+   "typeVersion": 1,
+   "position": [
+    660,
+    100
+   ],
+   "id": "save-to-outbox"
+  },
+  {
+   "parameters": {
+    "command": "/usr/bin/python3 /home/vzux/Desktop/Internship_Radar_n8n/tools/gmail_send.py ssubarno547@gmail.com /home/vzux/.n8n-files/radar/outbox"
+   },
+   "name": "Send alert",
+   "type": "n8n-nodes-base.executeCommand",
+   "typeVersion": 1,
+   "position": [
+    880,
+    100
+   ],
+   "id": "send-alert",
+   "retryOnFail": true,
+   "maxTries": 2,
+   "waitBetweenTries": 5000
+  }
+ ],
+ "connections": {
+  "On failure": {
+   "main": [
+    [
+     {
+      "node": "Build alert",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Test alert": {
+   "main": [
+    [
+     {
+      "node": "Build alert",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Build alert": {
+   "main": [
+    [
+     {
+      "node": "Alert to JSON",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Alert to JSON": {
+   "main": [
+    [
+     {
+      "node": "Save to outbox",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Save to outbox": {
+   "main": [
+    [
+     {
+      "node": "Send alert",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": false,
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "Asia/Kolkata"
+ }
+}

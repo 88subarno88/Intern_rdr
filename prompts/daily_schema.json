@@ -1,0 +1,1 @@
+{"type":"object","properties":{"top_pick":{"type":"string"},"duplicates":{"type":"array","items":{"type":"array","items":{"type":"integer"}}}},"required":["top_pick","duplicates"]}

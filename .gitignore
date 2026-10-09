@@ -1,0 +1,27 @@
+# Secrets must never be committed. The Gmail app password lives outside this folder, in
+# ~/.config/radar/gmail_app_password; these patterns are a second line of defence in case
+# a copy of it, or any other secret, is ever saved here.
+.env
+.env.*
+*.env
+*app_password*
+*apppassword*
+*password*.txt
+*secret*
+*.pem
+*.key
+credentials*.json
+*credentials*.txt
+token*.json
+
+# n8n data and working files (mail contents, run history) do not belong in the repo
+.n8n/
+.n8n-files/
+*.sqlite
+*.sqlite-*
+
+# Byproducts
+__pycache__/
+*.pyc
+*.tmp
+*.raw
