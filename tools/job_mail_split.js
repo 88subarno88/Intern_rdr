@@ -58,6 +58,8 @@ function indeed(mail) {
 
 // Glassdoor (plain text): one field per line. Company, title, location, optional pay,
 // optional "Easy Apply", age, then the job link in square brackets (jobListingId=<id>).
+// The item keeps that exact link from the mail: Glassdoor's security page blocks a
+// shortened link built from the job number.
 function glassdoor(mail) {
   const marked = (mail.text || '').replace(/\[(https?:\/\/[^\]]*)\]/g, (all, u) => /\/partner\/jobListing\.htm/i.test(u) ? '\n@@JOB ' + u.replace(/\s+/g, '') + '\n' : '\n');
   const jobs = [];
@@ -76,9 +78,8 @@ function glassdoor(mail) {
     if (/[₹$€£]|Est\.\)/.test(fields[fields.length - 1] || '')) notes.unshift('Pay: ' + fields.pop());
     if (fields.length < 3) continue;
     seen.add(id);
-    const host = (line.match(/^@@JOB (https?:\/\/[^\/]+)/) || [])[1];
     jobs.push({ id, title: fields[fields.length - 2], company: fields[fields.length - 3].replace(/\s*\d(\.\d)?\s*★$/, ''), location: fields[fields.length - 1],
-      notes, link: host + '/job-listing/?jl=' + id });
+      notes, link: line.slice(6) });
   }
   return jobs.length === links ? jobs : [];
 }

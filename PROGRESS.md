@@ -49,8 +49,6 @@ messages. After step 3, look at the output and compare with `03_workflow_3hourly
   Claude where about 20 mails did before. The first run after the change is the largest.
   If the Pro limit starts to bite, drop obviously senior titles in
   `tools/job_mail_split.js` before they are scored.
-- **Glassdoor links are untested.** They are rebuilt as
-  `glassdoor.co.in/job-listing/?jl=<n>`; click one in the first mail to confirm it opens.
 - **Old Gmail login can be removed.** Once the new setup has run for a few days: remove
   the app's access at <https://myaccount.google.com/permissions>, delete the Google
   Cloud project `n8ninternship` and the "Gmail account" credential in n8n.
@@ -162,6 +160,10 @@ messages. After step 3, look at the output and compare with `03_workflow_3hourly
     the outbox folder. All three workflows switched; no n8n Gmail node is left. The first
     app password was exposed in a screenshot and replaced. Old OAuth versions:
     `workflows/live_backup_2026-10-09_2345_oauth_*.json`.
+
+22. Glassdoor: the shortened link (`/job-listing/?jl=<n>`) opened Glassdoor's security
+    block page on the phone, so items now keep the exact link from the mail. Items scored
+    before 00:10 on 10 Oct still carry the short link.
 
 ## Technical notes for whoever edits this next
 

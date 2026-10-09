@@ -51,7 +51,7 @@ and its own card in the mail. Its code lives in `tools/job_mail_split.js`.
 | Board | Read from | Link in the item |
 |---|---|---|
 | LinkedIn | Plain text, "View job:" lines | `linkedin.com/jobs/view/<n>/` |
-| Glassdoor | Plain text, job links in square brackets | `glassdoor.co.in/job-listing/?jl=<n>` |
+| Glassdoor | Plain text, job links in square brackets | The mail's own job link, unchanged |
 | Indeed | Plain text, one paragraph per job | `in.indeed.com/viewjob?jk=<key>` |
 | Internshala | HTML cards (the mail has no usable plain text) | `internshala.com/internship/detail/...` |
 | Unstop | HTML cards: title, organiser, pay | Unstop's own tracking link from the mail |
